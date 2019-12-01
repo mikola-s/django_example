@@ -1,8 +1,24 @@
 {#{{ question }} минимальный шаблон#}
 
+{# щаблон из части 3#}
+{#<h1>{{ question.question_text }}</h1>#}
+{#<ul>#}
+{#{% for choice in question.chice_set.all %}#}
+{#    <li>{{ choice.choice_text }}</li>#}
+{#{% endfor %}#}
+{#</ul>#}
+
+{# шаблон из части 4 с формой #}
+
 <h1>{{ question.question_text }}</h1>
-<ul>
-{% for choice in question.chice_set.all %}
-    <li>{{ choice.choice_text }}</li>
+
+{% if error_message %} <p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+{% for choice in question.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
 {% endfor %}
-</ul>
+<input type="submit" value="Vote">
+</form>
